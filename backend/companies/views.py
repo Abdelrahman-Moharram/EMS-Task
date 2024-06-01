@@ -1,6 +1,5 @@
 from rest_framework import response, status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.decorators import api_view, permission_classes
 from accounts.permissions import IsEmployee, IsAdmin
 from django.contrib.auth import authenticate
 from .Serializer import *
@@ -147,7 +146,7 @@ def EditCompany(request, company_id):
         form = form.save()
         return response.Response(
             {
-                'message':f"company {company.name} updated succesfully successfully",
+                'message':f"company {form.name} updated succesfully!",
                 'id': form.id
             }, 
             status=status.HTTP_200_OK
@@ -182,10 +181,216 @@ def DeleteCompany(request, company_id):
             )
         name = company.name
         company.soft_delete()
-        return response.Response({'message':f"company {name} deleted succesfully successfully"}, status=status.HTTP_200_OK)
+        return response.Response({'message':f"company {name} deleted succesfully!"}, status=status.HTTP_200_OK)
         
     return response.Response({
         'errors':{
             'password':["password shouldn't be null"]
         }
     }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET'])
+@permission_classes((IsCompanyManagerOrAdmin,))
+def CompanyDepartmentsList(request, company_id):
+    try:
+        departments =  Department.objects.filter(company_id=company_id)
+
+        depart_serial = DepartmentListSerial(data=departments, many=True)
+        if depart_serial.is_valid():
+            pass
+
+        return response.Response(
+            data={
+                'departments': depart_serial.data
+            },
+            status=status.HTTP_200_OK
+        )
+    except:
+        return response.Response(
+            data={
+                'message': 'something went wrong please try again later'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+
+@api_view(['POST',])
+@permission_classes((IsCompanyManagerOrAdmin,))
+def CreateDepartment(request, company_id):
+    body = json.loads(request.body)
+    form = department_form(body)
+    company = Company.objects.filter(id=company_id).first()
+    if not company:
+        return response.Response(
+                {
+                    'message':"this company is invalid"
+                }, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    if form.is_valid():
+        form = form.save(commit=False)
+        form.company = company
+        form.save()
+        return response.Response(
+            {
+                'message':f'department {form.name} is created successfully',
+                'id': form.id
+            }, 
+            status=status.HTTP_200_OK
+        )
+    return response.Response({
+        'errors': form.errors.as_data()
+    }, status=status.HTTP_400_BAD_REQUEST) 
+
+
+
+
+@api_view(['PUT'])
+@permission_classes((IsCompanyManagerOrAdmin,))
+def EditDepartment(request, company_id, department_id):
+    department = Department.objects.filter(id=department_id).first()
+    if not department:
+        return response.Response(
+            {
+                'message': 'this Department not found or may be deleted'
+            }, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    body = json.loads(request.body)
+    form = department_form(body, instance=department)
+    if form.is_valid():
+        form = form.save()
+        return response.Response(
+            {
+                'message':f"department {form.name} updated succesfully!",
+                'id': form.id
+            }, 
+            status=status.HTTP_200_OK
+        )
+        
+    return response.Response({
+        'errors': form.errors.as_data()
+    }, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes((IsCompanyManagerOrAdmin,))
+def DeleteDepartment(request, company_id, department_id):
+    try:
+        department = Department.objects.filter(id=department_id).first()
+        if not department:
+            return response.Response(
+                {
+                    'message': 'this company not found or may be deleted'
+                }, 
+                status=status.HTTP_404_NOT_FOUND
+            ) 
+
+        
+        name = department.name
+        department.soft_delete()
+        return response.Response({'message':f"department {name} deleted succesfully!"}, status=status.HTTP_200_OK)
+    except:
+        return response.Response(
+            data={
+                'message': 'something went wrong please try again later'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+
+
+@api_view(['GET'])
+@permission_classes((IsAdmin,))
+def AllDepartmentsList(request):
+    try:
+        page = to_int(request.GET.get('page'), 0)
+        size = to_int(request.GET.get('size'), 10)
+        departments =  Department.objects.all().order_by('created_at')[page*size : (page+1) * size]
+
+        depart_serial = DepartmentListSerial(data=departments, many=True)
+        if depart_serial.is_valid():
+            pass
+
+        return response.Response(
+            data={
+                "page" : page,
+                "size": size,
+                "total":int(Department.objects.count()/size) or 1,
+                'departments': depart_serial.data
+            },
+            status=status.HTTP_200_OK
+        )
+    except:
+        return response.Response(
+            data={
+                'message': 'something went wrong please try again later'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(['GET'])
+@permission_classes((IsCompanyManagerOrAdmin,))
+def DepartmentDetails(request, company_id, department_id):
+    try:
+        department =  Department.objects.filter(id=department_id).first()
+
+        if not department:
+            return response.Response(data={
+                    'message': 'this Department is not found'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        depart_serial = DepartmentSerial(data=[department], many=True)
+        if depart_serial.is_valid():
+            pass
+
+        return response.Response(
+            data={
+                'department': depart_serial.data[0]
+            },
+            status=status.HTTP_200_OK
+        )
+    except:
+        return response.Response(
+            data={
+                'message': 'something went wrong please try again later'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+@api_view(['GET'])
+@permission_classes((IsCompanyManagerOrAdmin,))
+def DepartmentBase(request, company_id, department_id):
+        try:
+            department =  Department.objects.filter(id=department_id).first()
+
+            if not department:
+                return response.Response(data={
+                        'message': 'this Department is not found'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            depart_serial = DepartmentFormSerial(data=[department], many=True)
+            if depart_serial.is_valid():
+                pass
+
+            return response.Response(
+                data={
+                    'department': depart_serial.data[0]
+                },
+                status=status.HTTP_200_OK
+            )
+        except:
+            return response.Response(
+                data={
+                    'message': 'something went wrong please try again later'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

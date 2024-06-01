@@ -1,7 +1,7 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import CompanyForm from '../components/CompanyForm'
 import { useCompanyEditMutation, useCompanyFormQuery } from '../../../redux/api/companies'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 
@@ -10,7 +10,6 @@ const CompanyDashboard = () => {
     const {company_id} = useParams();
     const {data, isLoading:companyLoading} = useCompanyFormQuery({company_id})
     const [CompanyEdit, {isLoading}] = useCompanyEditMutation()
-    const nav = useNavigate()
     const [company, setCompany] = useState({
       id:'',
       name:'',

@@ -18,6 +18,10 @@ import CreateCompany from './Pages/Companies/CreateCompanies.tsx';
 import ManageLayout from './Pages/Companies/Manage/ManageLayout.tsx';
 import CompanyDashboard from './Pages/Companies/Manage/CompanyDashboard.tsx';
 import DeleteCompany from './Pages/Companies/Manage/DeleteCompany.tsx';
+import Departments from './Pages/Companies/Manage/Departments.tsx';
+import CreateDepartment from './Pages/Companies/Manage/CreateDepartment.tsx';
+import DepartmentDetails from './Pages/Companies/Manage/DepartmentDetails.tsx';
+import EditDepartment from './Pages/Companies/Manage/EditDepartment.tsx';
 
 
 const router = createBrowserRouter([
@@ -84,9 +88,21 @@ const router = createBrowserRouter([
                     index:true, element:<CompanyDashboard />
                   },
                   {
+                    path:'departments',
+                    children:[
+                      {index:true, element:<Departments />},
+                      {path:':department_id', element:<DepartmentDetails />},
+                      {path:'create', element:<CreateDepartment />},
+                      {path:':department_id/edit', element:<EditDepartment />},
+                      {path:':department_id/delete', element:<EditDepartment />}
+                      
+                    ]
+                  },
+                  {
                     path:'delete',
                     element:<DeleteCompany />
                   }
+                  
                 ]
               }
             ]

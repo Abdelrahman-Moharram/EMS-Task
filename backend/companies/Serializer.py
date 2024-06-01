@@ -40,6 +40,11 @@ class IncludedCompanySerial(serializers.ModelSerializer):
         fields=['id', 'name']
 
 
+class DepartmentListSerial(serializers.ModelSerializer):
+    class Meta:
+        model= Department
+        depth=1
+        fields=['id', 'name', 'created_at', 'description']
 
 
 class DepartmentSerial(serializers.ModelSerializer):
@@ -47,3 +52,9 @@ class DepartmentSerial(serializers.ModelSerializer):
         model= Department
         depth=1
         fields=['id', 'name', 'created_at', 'description', 'employees_len']
+
+class DepartmentFormSerial(serializers.ModelSerializer):
+    class Meta:
+        model= Department
+        depth=1
+        fields=['id', 'name', 'description']

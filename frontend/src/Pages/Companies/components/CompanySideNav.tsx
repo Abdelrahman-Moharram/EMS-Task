@@ -1,9 +1,8 @@
-import { FaTrash } from "react-icons/fa";
-import { IoSettingsSharp } from "react-icons/io5";
+import { FaFile, FaTrash, FaUserFriends } from "react-icons/fa";
 import { MdManageAccounts } from "react-icons/md";
 import { FaHome } from "react-icons/fa";
-import { RiMovieLine } from "react-icons/ri";
 import { Link, useParams } from "react-router-dom";
+import { FcDepartment } from "react-icons/fc";
 
 export default function CompanySideNav({className}:{className:string}) {
 
@@ -30,7 +29,7 @@ export default function CompanySideNav({className}:{className:string}) {
                                 to={`/companies/${company_id}/dashboard/departments`}
                                 className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                             >
-                                <RiMovieLine className="text-sm" />
+                                <FcDepartment />
                                 <span className="lg:text-sm text-xs">
                                     Departments
                                 </span>
@@ -66,7 +65,7 @@ export default function CompanySideNav({className}:{className:string}) {
                                         to={`/companies/${company_id}/dashboard/employees`}
                                         className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                                     >
-                                        <IoSettingsSharp />
+                                        <FaUserFriends />
                                         Employees
                                     </Link>
                                 </li>
@@ -76,7 +75,7 @@ export default function CompanySideNav({className}:{className:string}) {
                                         to={`/companies/${company_id}/dashboard/applications`}
                                         className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                                     >
-                                        <IoSettingsSharp />
+                                        <FaFile />
                                         Job Applications
                                     </Link>
                                 </li>

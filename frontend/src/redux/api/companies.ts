@@ -15,14 +15,7 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
 
         }),
 
-        getDepartmentsList:builder.query({
-            query:({page, size}:{page:number, size:number})=>({
-                url:"departments/",
-                method:'GET',
-                params:{page:page, size:size}
-
-            }),
-        }),
+        
 
         getCompaniesDetails:builder.query({
             query:({company_id}:{company_id:string | undefined})=>{
@@ -44,6 +37,7 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['companies']
         }),
+
         companyForm:builder.query({
             query:({company_id}:{company_id:string|undefined})=>{
                 return{
@@ -52,6 +46,7 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
                 }
             }
         }),
+
         companyEdit:builder.mutation({
             query:({company, company_id}:
                     {
@@ -66,6 +61,7 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
             },
             invalidatesTags: ['companies']
         }),
+
         deleteCompany:builder.mutation({
             query:({company_id, password}:{company_id:string|undefined, password:string})=>{
                 return{
@@ -84,7 +80,6 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetCompaniesListQuery,
-    useGetDepartmentsListQuery,
     useGetCompaniesDetailsQuery,
     useCreateCompanyMutation,
     useCompanyEditMutation,
