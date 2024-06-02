@@ -1,10 +1,9 @@
-import DetailItem from './DetailItem';
+import DetailItem from '../../Departments/Components/DetailItem';
 import { FcDepartment } from "react-icons/fc";
 import { FaCalendarAlt, FaUserFriends } from "react-icons/fa";
 import { ImageSkeleton } from '../../../Components/Common';
 import { useAppSelector } from '../../../redux/hooks';
 import LinkWithArrow from '../../../Components/Buttons&Links/LinkWithArrow';
-import AdminOrNull from '../../../Components/Guard/Content.Guard/AdminOrNull';
 import ManagerOrNull from '../../../Components/Guard/Content.Guard/ManagerOrNull';
 
 interface companyType{

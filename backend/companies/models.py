@@ -33,8 +33,6 @@ class Department(BaseModel):
     company         = models.ForeignKey('companies.Company', on_delete=models.DO_NOTHING)
     created_at      = models.DateTimeField(auto_now=False, auto_now_add=True)
     description     = models.TextField(null=True, blank=True)
-    
-
     objects = BaseModelManager()
 
     @property

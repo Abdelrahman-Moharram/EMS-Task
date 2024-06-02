@@ -26,17 +26,33 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['departments'],
         }),
-        getCompanyDepartmentDetails:builder.query({
-            query:({company_id, department_id}:{company_id:string|undefined, department_id:string | undefined})=>({
-                url:`${base_url}${company_id}/departments/${department_id}`,
+        getCompanyDepartmentsSelectList:builder.query({
+            query:({company_id}:{company_id:string|undefined})=>({
+                url:`${base_url}${company_id}/departments_select`,
+                method:'GET',
+            }),
+            providesTags: ['departments'],
+        }),
+        
+        getDepartmentDetails:builder.query({
+            query:({department_id}:{department_id:string | undefined})=>({
+                url:`departments/${department_id}`,
                 method:'GET',
             }),
             providesTags: ['departments'],
         }),
 
-        getCompanyDepartmentForm:builder.query({
-            query:({company_id, department_id}:{company_id:string|undefined, department_id:string | undefined})=>({
-                url:`${base_url}${company_id}/departments/${department_id}/base`,
+        getDepartmentEmployees:builder.query({
+            query:({department_id}:{department_id:string | undefined})=>({
+                url:`departments/${department_id}/employees`,
+                method:'GET',
+            }),
+            providesTags: ['departments'],
+        }),
+
+        getDepartmentForm:builder.query({
+            query:({department_id}:{department_id:string | undefined})=>({
+                url:`departments/${department_id}/base`,
                 method:'GET',
             }),
             providesTags: ['departments'],
@@ -45,16 +61,15 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
 
         createDepartment:builder.mutation({
             query:({company_id, department}:{company_id:string|undefined, department:departmentType})=>({
-                url:`${base_url}${company_id}/departments/create`,
+                url:`companies/${company_id}/departments/create`,
                 method:'POST',
                 body: department
             }),
             invalidatesTags: ['departments'],
         }),
-
         editDepartment:builder.mutation({
-            query:({company_id, department_id, department}:{company_id:string|undefined, department_id:string|undefined, department:departmentType})=>({
-                url:`${base_url}${company_id}/departments/${department_id}/edit`,
+            query:({department_id, department}:{department_id:string|undefined, department:departmentType})=>({
+                url:`departments/${department_id}/edit`,
                 method:'PUT',
                 body: department
             }),
@@ -62,8 +77,8 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
         }),
 
         deleteDepartment:builder.mutation({
-            query:({company_id, department_id}:{company_id:string|undefined, department_id:string|undefined})=>({
-                url:`${base_url}${company_id}/departments/${department_id}/delete`,
+            query:({department_id}:{department_id:string|undefined})=>({
+                url:`departments/${department_id}/delete`,
                 method:'DELETE',
             }),
             invalidatesTags: ['departments'],
@@ -80,6 +95,8 @@ export const {
     useCreateDepartmentMutation,
     useEditDepartmentMutation,
     useDeleteDepartmentMutation,
-    useGetCompanyDepartmentDetailsQuery,
-    useGetCompanyDepartmentFormQuery,
+    useGetDepartmentDetailsQuery,
+    useGetDepartmentFormQuery,
+    useGetDepartmentEmployeesQuery,
+    useGetCompanyDepartmentsSelectListQuery
 } = EmployeesApiSlice

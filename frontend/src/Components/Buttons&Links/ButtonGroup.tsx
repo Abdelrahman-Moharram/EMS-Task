@@ -3,8 +3,9 @@ import { Link } from "react-router-dom"
 interface Props{
     id:string, 
     handleDelete: (id:string)=>void, 
+    handleEdit:(id:string)=>void
 }
-const ButtonGroup = ({id, handleDelete}:Props) => {
+const ButtonGroup = ({id, handleDelete, handleEdit}:Props) => {
   return (
 <div className="grid grid-cols-3 rounded-lg border gap-2 border-gray-100 bg-gray-100 p-1">
     
@@ -30,8 +31,8 @@ const ButtonGroup = ({id, handleDelete}:Props) => {
     </svg>
 
   </Link>
-  <Link
-    to={`${id}/edit`}
+  <button
+    onClick={()=>handleEdit(id)}
     title="edit"
     className="flex justify-center items-center gap-2 rounded-md bg-white px-4 py-2 text-md font-semibold hover:shadow-md transition-all text-blue-500 shadow-sm focus:relative"
   >
@@ -50,7 +51,7 @@ const ButtonGroup = ({id, handleDelete}:Props) => {
       />
     </svg>
 
-  </Link>
+  </button>
 
 
   <button

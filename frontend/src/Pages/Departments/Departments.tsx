@@ -1,44 +1,76 @@
-import { useDeleteDepartmentMutation, useGetCompanyDepartmentsListQuery } from '../../../redux/api/departments'
+import { useDeleteDepartmentMutation, useGetCompanyDepartmentsListQuery } from '../../redux/api/departments'
 import { Link, useParams } from 'react-router-dom';
-import SectionHeader from '../../../Components/Common/SectionHeader';
-import CardOptionsList from '../../../Components/Lists/CardOptionsList';
+import SectionHeader from '../../Components/Common/SectionHeader';
+import CardOptionsList from '../../Components/Lists/CardOptionsList';
 import { useState } from 'react';
-import DeleteModal from '../../../Components/Modals/DeleteModal';
+import DeleteModal from '../../Components/Modals/DeleteModal';
 import { GoPlus } from 'react-icons/go';
 import { toast } from 'react-toastify';
+import OverLay from '../../Components/Modals/OverLay';
+import CreateDepartment from './CreateDepartment';
+import EditDepartment from './EditDepartment';
 
 const Departments = () => {
     const {company_id} = useParams();
     const {data} = useGetCompanyDepartmentsListQuery({company_id})
     const [deleteModal, setDeleteModal] = useState(false)
-    const [deleteItem, setDeleteitem] = useState('')
+    const [editModal, setEditModal] = useState(false)
+    const [createModal, setCreateModal] = useState(false)
+    const [item, setItem] = useState('')
+    
     const [deleteDepartment, {isLoading}] = useDeleteDepartmentMutation()    
 
     const handleDeleteModal = ()=>{
         setDeleteModal(!deleteModal)
     }
 
+    const handleEditModal = ()=>{
+        setEditModal(!editModal)
+    }
+    const handleEdit = (id:string)=>{
+        setItem(id);
+        handleEditModal()        
+    }
     const handleDelete = (id:string)=>{
-        setDeleteitem(id);
+        setItem(id);
         handleDeleteModal()        
     }
     
     const deleteAction = ()=>{
-        deleteDepartment({company_id, department_id:deleteItem})
+        deleteDepartment({department_id:item})
         .unwrap()
         .then((res:any)=>{
-            console.log(res);
             setDeleteModal(false)
-            setDeleteitem('')
+            setItem('')
             toast.success(res?.message)
         }).catch(err=>{
             toast.success(err?.data.message)
         })
     }
+    const handleCreateModal = ()=>{
+        setCreateModal(!createModal)
+    }
   return (
     <>
+        <OverLay 
+            toggleDetails={createModal}
+            handleToggler={handleCreateModal}
+        >
+            <CreateDepartment 
+                handleClose={handleCreateModal}
+            />
+        </OverLay>
 
-
+        <OverLay 
+            toggleDetails={editModal}
+            handleToggler={handleEditModal}
+        >
+            <EditDepartment 
+                oldDepartment={data?.departments?.find((i:any)=>i.id === item)}
+                department_id={item}
+                handleClose={handleEditModal}
+            />
+        </OverLay>
         <DeleteModal 
             title='Delete Department'
             open={deleteModal}
@@ -50,8 +82,8 @@ const Departments = () => {
             <span className='font-bold px-1'>
              '
             {
-                deleteItem?
-                    data?.departments?.find((i:any)=>i.id === deleteItem).name
+                item?
+                    data?.departments?.find((i:any)=>i.id === item).name
                 :null
             }
             ' 
@@ -61,19 +93,21 @@ const Departments = () => {
             ?
         </DeleteModal>
 
+
         <div className='p-3'>
             <SectionHeader title={'Departments'} />
             <div className="my-8">
-            <Link
-                to={'create'} 
+            <button
+                onClick={handleCreateModal}
                 className="flex items-center gap-1 w-fit px-8 py-3 border border-primary rounded-md my-3 hover:bg-primary transition-all hover:text-white"
             >
                 <GoPlus /> Create
-            </Link>
+            </button>
             </div>
             <CardOptionsList 
                 cards={data?.departments}
                 handleDelete={handleDelete}
+                handleEdit={handleEdit}
             />
         </div>
     </>

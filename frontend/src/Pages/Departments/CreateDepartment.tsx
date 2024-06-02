@@ -1,14 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import DepartmentForm from '../components/DepartmentForm'
-import { useCreateDepartmentMutation } from '../../../redux/api/departments'
+import DepartmentForm from './Components/DepartmentForm'
+import { useCreateDepartmentMutation } from '../../redux/api/departments'
 
 
-const CreateDepartment = () => {
+const CreateDepartment = ({handleClose}:{handleClose:()=>void}) => {
     const {company_id} = useParams();
     const [createDepartment, {isLoading}] = useCreateDepartmentMutation()
-    const nav = useNavigate()
     const initialDepartment = {
         name: '',
         description:''
@@ -26,10 +25,10 @@ const CreateDepartment = () => {
             .then((res:any)=>{
                 setDepartment(initialDepartment)
                 toast.success(res?.message)
-                nav(`/companies/${company_id}/dashboard/departments/${res?.id}`)
             }).catch(err=>{
                 toast.success(err?.data.message)
             })
+            handleClose()
         }
     }
   return (

@@ -2,18 +2,23 @@ import React, { ChangeEvent } from 'react'
 
 interface props {
 	labelId: string;
-	onChange: (e:ChangeEvent<HTMLTextAreaElement>) => void;
+	children: React.ReactNode;
+	onChange: (e:ChangeEvent<HTMLSelectElement>) => void;
 	value: string;
 	label: string
 	required?: boolean;
+    emptyoption?:boolean;
     errors?: []
 }
 
-const FloatingTextarea = ({labelId,
+const FloatingSelectInput = ({
+    labelId,
+	children,
 	onChange,
 	value,
-	label,
+    label,
 	required = false,
+    emptyoption = true,
     errors
 }: props) => {
   return (
@@ -22,17 +27,22 @@ const FloatingTextarea = ({labelId,
         htmlFor={labelId}
         className="relative block rounded-md border border-primary/80 shadow-sm"
     >
-        <textarea
+        <select
             name={labelId}
-            rows={4}
             id={labelId}
-            required={required}
-            className="p-4 resize-none peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 w-full"
-            placeholder={label}
             onChange={onChange}
             value={value}
+            required={required}
+            className="p-2 peer w-full border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"        
         >
-        </textarea>
+            {
+                emptyoption?
+                    <option value=""></option>
+                :null
+            }
+            {children}
+        </select>
+
         <span
             className="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-primary transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs"
         >
@@ -48,4 +58,4 @@ const FloatingTextarea = ({labelId,
   )
 }
 
-export default FloatingTextarea
+export default FloatingSelectInput

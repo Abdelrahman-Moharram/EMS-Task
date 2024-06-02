@@ -11,9 +11,10 @@ interface card{
 interface Props{
     card: card
     handleDelete:(id:string)=>void
+    handleEdit:(id:string)=>void
 }
 
-const BasicCardWithOptions = ({card, handleDelete}:Props) => {
+const BasicCardWithOptions = ({card, handleDelete, handleEdit}:Props) => {
   return (
     <article
      className="rounded-lg relative border h-[270px] border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-lg sm:p-6"
@@ -33,6 +34,7 @@ const BasicCardWithOptions = ({card, handleDelete}:Props) => {
             <ButtonGroup 
                 id={card.id}
                 handleDelete={handleDelete}
+                handleEdit={handleEdit}
             />
         </div>
     </article>

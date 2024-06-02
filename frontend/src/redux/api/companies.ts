@@ -15,6 +15,12 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
 
         }),
 
+        getCompaniesEmployees:builder.query({
+            query:({company_id}:{company_id:string|undefined})=>({
+                url:`companies/${company_id}/employees`,
+                method:'GET',
+            }),
+        }),
         
 
         getCompaniesDetails:builder.query({
@@ -77,7 +83,6 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
          
 }) 
 
-
 export const {
     useGetCompaniesListQuery,
     useGetCompaniesDetailsQuery,
@@ -85,4 +90,5 @@ export const {
     useCompanyEditMutation,
     useCompanyFormQuery,
     useDeleteCompanyMutation,
+    useGetCompaniesEmployeesQuery
 } = EmployeesApiSlice

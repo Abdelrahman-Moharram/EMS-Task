@@ -6,6 +6,8 @@ from .Serializer import *
 from .models import *
 from .permissions import *
 import json
+from employees.Serializer import EmployeeSerializer
+
 
 from .forms import *
 # Create your views here.
@@ -69,9 +71,8 @@ def CompanyDetails(request, company_id):
 
     if company_serializer.is_valid():
         pass
-    emp = Employee.objects.filter(user=request.user).first() or False
-    if emp:
-        emp.company == company
+    emp = Employee.objects.filter(user=request.user, company=company.first()).exists()
+
     return response.Response(data={
             'company': company_serializer.data[0],
             'departments': departments_serializer.data,
@@ -192,7 +193,7 @@ def DeleteCompany(request, company_id):
 
 
 @api_view(['GET'])
-@permission_classes((IsCompanyManagerOrAdmin,))
+@permission_classes((IsCompanyEmployeeOrAdmin,))
 def CompanyDepartmentsList(request, company_id):
     try:
         departments =  Department.objects.filter(company_id=company_id)
@@ -214,6 +215,32 @@ def CompanyDepartmentsList(request, company_id):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+@api_view(['GET'])
+@permission_classes((IsCompanyEmployeeOrAdmin,))
+def CompanyDepartmentsSelectList(request, company_id):
+    try:
+        departments =  Department.objects.filter(company_id=company_id)
+
+        depart_serial = IncludedDepartmentSerial(data=departments, many=True)
+        if depart_serial.is_valid():
+            pass
+
+        return response.Response(
+            data={
+                'departments': depart_serial.data
+            },
+            status=status.HTTP_200_OK
+        )
+    except:
+        return response.Response(
+            data={
+                'message': 'something went wrong please try again later'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
 
 
 
@@ -250,7 +277,7 @@ def CreateDepartment(request, company_id):
 
 @api_view(['PUT'])
 @permission_classes((IsCompanyManagerOrAdmin,))
-def EditDepartment(request, company_id, department_id):
+def EditDepartment(request, department_id):
     department = Department.objects.filter(id=department_id).first()
     if not department:
         return response.Response(
@@ -279,7 +306,7 @@ def EditDepartment(request, company_id, department_id):
 
 @api_view(['DELETE'])
 @permission_classes((IsCompanyManagerOrAdmin,))
-def DeleteDepartment(request, company_id, department_id):
+def DeleteDepartment(request, department_id):
     try:
         department = Department.objects.filter(id=department_id).first()
         if not department:
@@ -336,8 +363,8 @@ def AllDepartmentsList(request):
 
 
 @api_view(['GET'])
-@permission_classes((IsCompanyManagerOrAdmin,))
-def DepartmentDetails(request, company_id, department_id):
+@permission_classes((IsCompanyEmployeeOrAdmin,))
+def DepartmentDetails(request, department_id):
     try:
         department =  Department.objects.filter(id=department_id).first()
 
@@ -367,7 +394,7 @@ def DepartmentDetails(request, company_id, department_id):
     
 @api_view(['GET'])
 @permission_classes((IsCompanyManagerOrAdmin,))
-def DepartmentBase(request, company_id, department_id):
+def DepartmentBase(request, department_id):
         try:
             department =  Department.objects.filter(id=department_id).first()
 
@@ -394,3 +421,89 @@ def DepartmentBase(request, company_id, department_id):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+
+@api_view(['GET'])
+@permission_classes((IsCompanyEmployeeOrAdmin,))
+def GetCompanyEmployees(request, company_id):
+    try:
+        employees =  Employee.objects.filter(company_id=company_id)
+
+        if not employees:
+            return response.Response(data={
+                    'employees': []
+                },
+                status=status.HTTP_200_OK
+            )
+        employees_serial = EmployeeSerializer(data=employees, many=True)
+        if employees_serial.is_valid():
+            pass
+
+        return response.Response(
+            data={
+                'employees': employees_serial.data
+            },
+            status=status.HTTP_200_OK
+        )
+    except:
+        return response.Response(
+            data={
+                'message': 'something went wrong please try again later'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(['GET'])
+@permission_classes((IsCompanyEmployeeOrAdmin,))
+def GetDepartmentEmployees(request, department_id):
+    try:
+        employees =  Employee.objects.filter(department_id=department_id)
+
+        if not employees:
+            return response.Response(data={
+                    'message': 'this Department is not found'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        employees_serial = EmployeeSerializer(data=employees, many=True)
+        if employees_serial.is_valid():
+            pass
+
+        return response.Response(
+            data={
+                'employees': employees_serial.data
+            },
+            status=status.HTTP_200_OK
+        )
+    except:
+        return response.Response(
+            data={
+                'message': 'something went wrong please try again later'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(['DELETE'])
+@permission_classes((IsCompanyManagerOrAdmin,))
+def RemoveCompanyEmployee(request, company_id):
+    body = json.loads(request.body)
+    if 'employee_id' not in body:
+        return response.Response(
+                {
+                    'message': 'employee data is not valid'
+                }, 
+                status=status.HTTP_400_BAD_REQUEST
+            ) 
+    
+    emp = Employee.objects.filter(id=body['employee_id']).first()
+    if emp:
+        name = emp.user.username
+        emp.delete()
+        return response.Response(
+            {
+                'message': f'Employee {name} Removed Successfully'
+            }
+        )

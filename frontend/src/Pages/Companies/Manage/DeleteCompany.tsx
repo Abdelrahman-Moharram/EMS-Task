@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useCompanyFormQuery, useDeleteCompanyMutation } from '../../../redux/api/companies'
 import { toast } from 'react-toastify'
 import SectionHeader from '../../../Components/Common/SectionHeader'
-import Details from '../components/Details'
+import Details from '../../Departments/Components/Details'
 import { FaTrash } from 'react-icons/fa'
 
 const DeleteCompany = () => {

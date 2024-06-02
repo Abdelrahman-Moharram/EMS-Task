@@ -6,15 +6,21 @@ from .views import (
     CompanyForm,
     EditCompany,
     DeleteCompany,
-
     AllDepartmentsList,
+
+    GetCompanyEmployees,
 
     CompanyDepartmentsList,
     CreateDepartment,
     EditDepartment,
     DeleteDepartment,
     DepartmentDetails,
-    DepartmentBase
+    DepartmentBase,
+
+
+    GetDepartmentEmployees,
+
+    CompanyDepartmentsSelectList
 
 )
 
@@ -27,14 +33,17 @@ urlpatterns = [
     path("api/companies/<str:company_id>/edit", EditCompany, name="company_update"),
     path("api/companies/<str:company_id>/delete", DeleteCompany, name="company_delete"),
     path("api/companies/<str:company_id>/departments", CompanyDepartmentsList, name="companydepartments"),
+    path("api/companies/<str:company_id>/departments_select", CompanyDepartmentsSelectList, name="companydepartments"),
+    
+    path("api/companies/<str:company_id>/departments/create", CreateDepartment, name="companydepartments"),
+
+    path("api/companies/<str:company_id>/employees", GetCompanyEmployees, name='Department_Employees'),
 
     path("api/departments/", AllDepartmentsList, name="departments"),
-    path("api/companies/<str:company_id>/departments", CompanyDepartmentsList, name="companydepartments"),
-    path("api/companies/<str:company_id>/departments/create", CreateDepartment, name="companydepartments"),
-    path("api/companies/<str:company_id>/departments/<str:department_id>/", DepartmentDetails, name="companydepartments"),
-    path("api/companies/<str:company_id>/departments/<str:department_id>/base", DepartmentBase, name="companydepartments"),
-    path("api/companies/<str:company_id>/departments/<str:department_id>/edit", EditDepartment, name="companydepartments"),
-    path("api/companies/<str:company_id>/departments/<str:department_id>/delete", DeleteDepartment, name="companydepartments"),
+    path("api/departments/<str:department_id>/", DepartmentDetails, name="companydepartments"),
+    path("api/departments/<str:department_id>/base", DepartmentBase, name="companydepartments"),
+    path("api/departments/<str:department_id>/edit", EditDepartment, name="companydepartments"),
+    path("api/departments/<str:department_id>/delete", DeleteDepartment, name="companydepartments"),
     
-    
+    path("api/departments/<str:department_id>/employees", GetDepartmentEmployees, name='Department_Employees')
 ]

@@ -2,22 +2,28 @@ import { useEffect, useState } from 'react'
 import EmptyContent from '../Common/EmptyContent';
 import { ImageSkeleton, Spinner } from '../Common';
 import { BasicCard } from '../Cards';
-import BasicCardWithOptions from '../Cards/BasicCardWithOptions';
+import EmployeeCard from '../Cards/EmployeeCard';
 
 
 
 interface card{
     id: string,
-    name: string,
-    description: string,
-    created_at: Date,
-}
+    user_id: string,
+    email: string,
+    username: string,
+    phonenumber: string,
+    designation: string,
+    hired_on: Date,
+    role: string,
+    status: string,
+    image?:string,
+    departmentName:string;
+    companyName:string
+  }
 interface props{
     cards: card[],
-    handleDelete:(id:string)=>void
-    handleEdit:(id:string)=>void
 }
-const CardOptionsList = ({cards, handleDelete, handleEdit}:props) => {
+const EmployeeCardsList = ({cards}:props) => {
 
   const [waitingDelay, setWaitingDelay] = useState(true)
   
@@ -51,11 +57,9 @@ const CardOptionsList = ({cards, handleDelete, handleEdit}:props) => {
             {
             cards?.length?
               cards.map(card=>(
-                  <BasicCardWithOptions
-                        card={card} 
-                        key={card.id}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
+                    <EmployeeCard 
+                        data={card} 
+                        key={card.id} 
                     />
                 ))
               :
@@ -70,4 +74,4 @@ const CardOptionsList = ({cards, handleDelete, handleEdit}:props) => {
   )
 }
 
-export default CardOptionsList
+export default EmployeeCardsList

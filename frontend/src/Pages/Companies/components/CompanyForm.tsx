@@ -49,7 +49,6 @@ const CompanyForm = ({company,changeCompany,handleForm, isLoading, buttonText}:P
             >
                 <span>{buttonText? buttonText: 'Create'}</span>
                 {
-                    
                     isLoading?
                      <Spinner sm />
                     :null

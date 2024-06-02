@@ -1,24 +1,29 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import DepartmentForm from '../components/DepartmentForm'
-import { useParams } from 'react-router-dom'
+import DepartmentForm from './Components/DepartmentForm'
 import { toast } from 'react-toastify'
-import { useEditDepartmentMutation, useGetCompanyDepartmentFormQuery } from '../../../redux/api/departments'
+import { useEditDepartmentMutation } from '../../redux/api/departments'
 
-
-
-const EditDepartment = () => {
-    const {department_id, company_id} = useParams();
-    const {data, isLoading:DepartmentLoading} = useGetCompanyDepartmentFormQuery({department_id, company_id})
+interface DeptType{
+  id:string;
+  name:string;
+  description:string
+}
+const EditDepartment = ({department_id, handleClose, oldDepartment}:{department_id:string, handleClose:()=>void, oldDepartment:DeptType}) => {
     const [DepartmentEdit, {isLoading}] = useEditDepartmentMutation()
+    
     const [department, setDepartment] = useState({
       id:'',
       name:'',
       description:''
     })
     useEffect(()=>{
-      if(data?.department)
-        setDepartment(data?.department)
-    },[DepartmentLoading])
+      if(oldDepartment)
+      {
+        setDepartment(oldDepartment)
+      }
+    },[oldDepartment?.id, department_id])
+
+    
     const  changeDepartment = (e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>{
         const {name, value} = e.target
         setDepartment({...department, [name]:value})
@@ -26,13 +31,14 @@ const EditDepartment = () => {
     const handleForm =(e:FormEvent)=>{
         e.preventDefault()
         if(department){
-            DepartmentEdit({department, department_id, company_id})
+            DepartmentEdit({department, department_id})
             .unwrap()
             .then((res:any)=>{
                 toast.success(res?.message)
             }).catch(err=>{
                 toast.success(err?.data.message)
             })
+          handleClose()
         }
     }
    
@@ -40,14 +46,16 @@ const EditDepartment = () => {
     <div>
       {
 
-        department?.name ?
-          <DepartmentForm 
-            department={department}
-            changeDepartment={changeDepartment}
-            handleForm={handleForm}
-            isLoading={isLoading}
-            buttonText='Save'
-          />
+        department?.id ?
+          <div>
+            <DepartmentForm 
+              department={department}
+              changeDepartment={changeDepartment}
+              handleForm={handleForm}
+              isLoading={isLoading}
+              buttonText='Save'
+            />
+          </div>
         :null
       }
     </div>
