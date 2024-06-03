@@ -66,29 +66,17 @@ const UserNavDropDown = ({user}:Props) => {
                 <MenuItem>
                   {({ active }) => (
                     <Link
-                      to={`/auth/profile/${user.id}`}
+                      to={`/settings`}
                       className={classNames(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                         'block px-4 py-2 text-sm'
                       )}
                     >
-                      Profile
+                      Manage Profile
                     </Link>
                   )}
                 </MenuItem>
-                <MenuItem>
-                  {({ active }) => (
-                    <Link
-                      to="/auth/settings"
-                      className={classNames(
-                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm'
-                      )}
-                    >
-                      Settings
-                    </Link>
-                  )}
-                </MenuItem>
+                
               </div>
 
 

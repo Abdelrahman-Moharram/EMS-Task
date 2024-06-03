@@ -1,6 +1,7 @@
 from rest_framework import response, status
 from rest_framework.decorators import api_view, permission_classes
 from accounts.permissions import IsEmployee, IsAdmin
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from .Serializer import *
 from .models import *
@@ -19,8 +20,35 @@ def to_int(val, default):
             pass
     return default
 
+
+###################################### Company #####################################
 @api_view(['GET'])
-@permission_classes((IsEmployee,))
+@permission_classes((IsAuthenticated,))
+def ListCompaniesSelectList(request):
+    
+    try:
+        companies = Company.objects.all().order_by('created_at')
+        company_serializer = IncludedCompanySerial(data=companies, many=True)
+        if company_serializer.is_valid():
+            pass
+
+
+        return response.Response(data={
+            'companies': company_serializer.data,
+        },
+        status=status.HTTP_200_OK
+        )
+    except:
+        return response.Response(data={
+                'message': 'something went wrong please try again later'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
 def ListCompanies(request):
     
     try:
@@ -49,7 +77,7 @@ def ListCompanies(request):
         )
 
 @api_view(['GET'])
-@permission_classes((IsEmployee,))
+@permission_classes((IsAuthenticated,))
 def CompanyDetails(request, company_id):
     
     company = Company.objects.filter(id=company_id)
@@ -191,6 +219,10 @@ def DeleteCompany(request, company_id):
     }, status=status.HTTP_400_BAD_REQUEST)
 
 
+###################################### End Company #####################################
+
+
+###################################### Department #####################################
 
 @api_view(['GET'])
 @permission_classes((IsCompanyEmployeeOrAdmin,))
@@ -507,3 +539,6 @@ def RemoveCompanyEmployee(request, company_id):
                 'message': f'Employee {name} Removed Successfully'
             }
         )
+
+
+###################################### End Department #####################################

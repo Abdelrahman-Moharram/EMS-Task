@@ -56,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff            = models.BooleanField(default=False)
     is_superuser        = models.BooleanField(default=False)
     role                = models.ForeignKey(Role, on_delete=models.DO_NOTHING, null=True, blank=True)
+    
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'

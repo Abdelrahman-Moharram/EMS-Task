@@ -1,14 +1,14 @@
-import { useDeleteDepartmentMutation, useGetCompanyDepartmentsListQuery } from '../../redux/api/departments'
+import { useDeleteDepartmentMutation, useGetCompanyDepartmentsListQuery } from '../../../redux/api/departments'
 import { Link, useParams } from 'react-router-dom';
-import SectionHeader from '../../Components/Common/SectionHeader';
-import CardOptionsList from '../../Components/Lists/CardOptionsList';
+import SectionHeader from '../../../Components/Common/SectionHeader';
+import CardOptionsList from '../../../Components/Lists/CardOptionsList';
 import { useState } from 'react';
-import DeleteModal from '../../Components/Modals/DeleteModal';
+import DeleteModal from '../../../Components/Modals/DeleteModal';
 import { GoPlus } from 'react-icons/go';
 import { toast } from 'react-toastify';
-import OverLay from '../../Components/Modals/OverLay';
-import CreateDepartment from './CreateDepartment';
-import EditDepartment from './EditDepartment';
+import OverLay from '../../../Components/Modals/OverLay';
+import CreateDepartment from '../../Departments/CreateDepartment';
+import EditDepartment from '../../Departments/EditDepartment';
 
 const Departments = () => {
     const {company_id} = useParams();

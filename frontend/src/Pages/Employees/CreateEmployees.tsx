@@ -18,7 +18,7 @@ const CreateEmployees = ({handleOverLay}:props) => {
         phonenumber:'',
         designation:'',
         stage:'',
-        company: company_id
+        company: company_id ?? ''
     })
     
     
@@ -28,13 +28,14 @@ const CreateEmployees = ({handleOverLay}:props) => {
     }
     const handleForm = (e:FormEvent) =>{
         e.preventDefault()
-        createEmployee(employee)
+        createEmployee({employee, company_id: employee.company ?? company_id})
         .unwrap()
         .then((data)=>{
             toast.success(data?.message)
             handleOverLay()
         }).catch((err:any)=>{
             console.log(err);
+            
             setErrors(err.data.errors)
         })
     }
@@ -42,11 +43,11 @@ const CreateEmployees = ({handleOverLay}:props) => {
     <EmployeeForm
         employee={employee}
         buttonText='Create'
-        company_id={company_id}
         handleForm={handleForm}
         onChange={onChange}
         isLoading={isLoading}
         errors={errors}
+        company_id={company_id}
     />
   )
 }

@@ -14,12 +14,18 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
             providesTags: ['companies'],
 
         }),
-
+        getCompaniesSelectList:builder.mutation({
+            query:()=>({
+                url:"companies/select-list",
+                method:'GET',
+            }),
+        }),
         getCompaniesEmployees:builder.query({
             query:({company_id}:{company_id:string|undefined})=>({
                 url:`companies/${company_id}/employees`,
                 method:'GET',
             }),
+            providesTags: ['employees'],
         }),
         
 
@@ -90,5 +96,6 @@ export const {
     useCompanyEditMutation,
     useCompanyFormQuery,
     useDeleteCompanyMutation,
-    useGetCompaniesEmployeesQuery
+    useGetCompaniesEmployeesQuery,
+    useGetCompaniesSelectListMutation
 } = EmployeesApiSlice

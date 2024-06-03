@@ -50,8 +50,8 @@ class Employee(BaseModel):
     
     @property
     def days_employed(self):
-        if not self.hired_on:
-            return 
+        if not self.stage.name.lower() == 'hired':
+            return None
         return (localdate() - self.hired_on.date()).days
 
     def __str__(self):

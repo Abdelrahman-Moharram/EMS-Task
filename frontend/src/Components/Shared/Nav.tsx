@@ -1,4 +1,5 @@
 import { useAppSelector} from '../../redux/hooks';
+import AdminOrNull from '../Guard/Content.Guard/AdminOrNull';
 import UserNavDropDown from './UserNavDropDown';
 import { Link } from 'react-router-dom';
 
@@ -54,6 +55,11 @@ export default function Navbar() {
                         <li>
                             <Link className="text-gray-500 transition hover:text-gray-500/75" to="/companies"> Companies </Link>
                         </li>
+                        <AdminOrNull>
+                            <li>
+                                <Link className="text-gray-500 transition hover:text-gray-500/75" to="/employees"> Employees </Link>
+                            </li>
+                        </AdminOrNull>
                     </ul>
                     </nav>
                 </div>

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     ListCompanies,
+    ListCompaniesSelectList,
     CompanyDetails,
     CreateCompany,
     CompanyForm,
@@ -27,6 +28,7 @@ from .views import (
 
 urlpatterns = [
     path("api/companies/", ListCompanies, name="companies"),
+    path("api/companies/select-list", ListCompaniesSelectList, name="companies-selectlist"),
     path("api/companies/create", CreateCompany, name="create_company"),
     path("api/companies/<str:company_id>/", CompanyDetails, name="company"),
     path("api/companies/<str:company_id>/base", CompanyForm, name="company_base"),

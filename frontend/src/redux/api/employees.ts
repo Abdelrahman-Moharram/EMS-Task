@@ -4,35 +4,76 @@ import { apiSlice } from "../services/apiSlice";
 const EmployeesApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder)=>({
 
-
-        getHiringStages:builder.query({
+        getEmployeeList:builder.query({
             query:()=>({
-                url:"employees/hiring-stages",
+                url:`employees/`,
                 method:'GET',
+            }),
+            providesTags:['employees']
+        }),
+
+        getEmployeeDetails:builder.query({
+            query:({employee_id}:{employee_id:string|undefined})=>({
+                url:`employees/${employee_id}`,
+                method:'GET',
+            }),
+        }),
+        getHiringStages:builder.mutation({
+            query:({stage}:{stage:string|null})=>({
+                url:"employees/hiring-stages",
+                method:'POST',
+                body:{stage}
             }),
         }),
 
         createEmployee:builder.mutation({
-            query:(credentials)=>({
-                url:"employees/create",
+            query:({employee, company_id})=>({
+                url:`employees/companies/${company_id}/create`,
                 method:'POST',
-                body:{...credentials}
+                body:{...employee}
             }),
+            invalidatesTags: ['employees']
         }),
+
+
 
         editEmployee:builder.mutation({
-            query:(credentials)=>({
-                url:"employees/edit",
+            query:({employee, company_id})=>({
+                url:`employees/companies/${company_id}/update`,
                 method:'PUT',
-                body:{...credentials}
+                body:{...employee}
             }),
+            invalidatesTags: ['employees']
+
         }),
 
+        deleteEmployee:builder.mutation({
+            query:({employee_id, company_id})=>({
+                url:`employees/companies/${company_id}/${employee_id}/delete`,
+                method:'DELETE',
+            }),
+            invalidatesTags: ['employees']
+
+        }),
+        // delete_employee
+        getFormEmployee:builder.query({
+            query:({employee_id}:{employee_id:string})=>({
+                url:`employees/${employee_id}/form`,
+                method:'GET',
+            }),
+        }),
+        
        
     })
          
 }) 
 export const {
-    useGetHiringStagesQuery,
-    useCreateEmployeeMutation
+    useGetEmployeeListQuery,
+    useGetHiringStagesMutation,
+    useCreateEmployeeMutation,
+    useGetFormEmployeeQuery,
+    useEditEmployeeMutation,
+    useDeleteEmployeeMutation,
+    useGetEmployeeDetailsQuery
+    
 } = EmployeesApiSlice

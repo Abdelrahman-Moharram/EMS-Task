@@ -7,13 +7,17 @@ const emptyUser = {
 	email:'',
 	username:"",
 	id:'',
-	role:''
+	role:'',
+	employee_id:'',
+	company_id:''
 }
 interface user {
     id: string;
     username:string;
     email:string;
-	role:string 
+	role?:string 
+	employee_id?:string
+	company_id?:string
 
 }
 interface AuthState {

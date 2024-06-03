@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from .models import User
-
+from employees.models import Employee
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -14,7 +14,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         if user.role:
             token['role'] = user.role.name
-        # ...
+        emp = Employee.objects.filter(user=user).first()
+        if emp:
+            token['employee_id'] = str(emp.id)
+            token['company_id'] = str(emp.company.id)
 
         return token
 

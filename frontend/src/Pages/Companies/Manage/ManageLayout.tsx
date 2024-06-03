@@ -8,7 +8,7 @@ const ManageLayout = () => {
     >
         <CompanySideNav className={'lg:col-span-1 lg:flex hidden mt-[50px] justify-center'}  />
         <div className=" col-span-4 py-2 lg:pr-8">
-            <div className="bg-white rounded-md min-h-full shadow-lg">
+            <div className="bg-white rounded-md min-h-[90%] shadow-lg">
                 <Outlet />
             </div>
         </div>

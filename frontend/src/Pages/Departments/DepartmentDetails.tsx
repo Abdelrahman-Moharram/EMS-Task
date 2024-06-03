@@ -18,7 +18,9 @@ const DepartmentDetails = () => {
       <p className="mx-4 my-12 font-semibold">
         {data?.department?.description}
       </p>
-      <div className="p-4 my-5">
+      <hr />
+      <div className="p-4 mt-5">
+        <h3 className='font-bold'>Department Employees</h3>
         <EmployeeCardsSwiper
           cards={data?.department?.employee_set}
         />

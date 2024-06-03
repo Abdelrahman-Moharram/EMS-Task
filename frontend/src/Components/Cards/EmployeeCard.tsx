@@ -9,7 +9,7 @@ interface data{
     designation: string,
     hired_on: Date,
     role: string,
-    status: string,
+    stage: string,
     image?:string;
     departmentName: string;
     companyName: string;
@@ -19,12 +19,14 @@ interface props{
     data:data
 }
 const EmployeeCard = ({data}:props) => {
+    console.log(data);
+    
     const created_date = () => {
         const date = new Date(data.hired_on)
         return date.toDateString()
     }    
   return (
-    <div className="relative flex flex-col mt-6 text-gray-700 bg-white shadow-lg bg-clip-border rounded-xl w-96">
+    <div className="relative w-full flex flex-col mt-6 text-gray-700 bg-white shadow-lg bg-clip-border rounded-xl">
         {
             data.image?
                 <div
@@ -42,11 +44,19 @@ const EmployeeCard = ({data}:props) => {
             </h5>
             <span className=" text-gray-500 text-sm">{data.departmentName} at {data.companyName}</span>
             
-            <ul className="list-inside ml-1 mt-4">
+            <ul className="list-inside ml-1 mt-4 space-y-2">
                 <li>job title: {data?.designation} </li>
                 <li>email: {data.email}</li>
-                <li>phonenumber: {data.phonenumber}</li>
-                <li>hired_on: {created_date()}</li>
+                <li>Phone Number: {data.phonenumber}</li>
+                <li>
+                    {
+                        data?.stage === 'Hired'?
+                            <span>hired on: {created_date()}</span>
+                        :
+                            <span>status: {data?.stage}</span>
+
+                    }
+                </li>
             </ul>
 
         </div>

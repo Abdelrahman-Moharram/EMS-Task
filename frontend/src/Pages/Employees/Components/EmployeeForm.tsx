@@ -1,9 +1,10 @@
-import React, { ChangeEvent, FormEvent } from 'react'
+import { ChangeEvent, FormEvent, useEffect } from 'react'
 import FloatingInput from '../../../Components/Forms/FloatingInput'
 import FloatingSelectInput from '../../../Components/Forms/FloatingSelectInput'
-import { useGetHiringStagesQuery } from '../../../redux/api/employees'
-import { useGetCompanyDepartmentsSelectListQuery } from '../../../redux/api/departments'
+import { useGetHiringStagesMutation } from '../../../redux/api/employees'
+import { useGetCompanyDepartmentsSelectListMutation } from '../../../redux/api/departments'
 import { Spinner } from '../../../Components/Common'
+import { useGetCompaniesSelectListMutation } from '../../../redux/api/companies'
 
 
 interface EmployeeType{
@@ -12,7 +13,8 @@ interface EmployeeType{
     address:string
     phonenumber:string
     designation:string
-    stage:string
+    stage:string;
+    company: string
 }
 
 interface optionType{
@@ -28,13 +30,34 @@ interface Props{
     buttonText:string
     isLoading:boolean
     employee: EmployeeType
-    company_id:string | undefined
+    company_id?:string | undefined
     errors?:any | null
-}
-const EmployeeForm = ({onChange, handleForm, employee, company_id, buttonText, isLoading, errors}:Props) => {
-    const {data} = useGetCompanyDepartmentsSelectListQuery({company_id})
-    const {data:stages} = useGetHiringStagesQuery({undefined})
+    edit?:boolean,
 
+}
+const EmployeeForm = ({onChange, handleForm, employee, company_id, buttonText, isLoading, errors, edit}:Props) => {
+    const [getCompanySelectList, {data:companyData}] = useGetCompaniesSelectListMutation()
+    const [getCompanyDepartmentsSelectList ,{data}] = useGetCompanyDepartmentsSelectListMutation()
+    
+    const [getHiringStages ,{data:stages}] = useGetHiringStagesMutation(undefined)   
+    useEffect(()=>{
+        if(!company_id){
+            getCompanySelectList(undefined)
+        }
+        
+    },[company_id])
+
+
+    useEffect(()=>{
+        if(employee.company){
+            getCompanyDepartmentsSelectList({company_id: employee.company})
+        }
+        console.log(employee);
+        if(employee.stage)  {
+            getHiringStages({stage: employee.stage})
+        }
+    },[employee.company])
+    
   return (
     <div className='p-5 mt-10 w-[50%]'>
       <form onSubmit={handleForm}>
@@ -47,8 +70,32 @@ const EmployeeForm = ({onChange, handleForm, employee, company_id, buttonText, i
                 value={employee.email}
                 required
                 errors={errors?.email}
+                readOnly={edit}
             />
         </div>
+        {
+            !company_id ?
+                <div className="mb-5">
+                    <FloatingSelectInput
+                        label='company'
+                        labelId='company'
+                        onChange={onChange}
+                        emptyoption
+                        value={employee.company}
+                        required
+                        errors={errors?.company}
+                    >
+                        {
+                            companyData?.companies?.map((com:optionType)=>(
+                                <option key={com.id} value={com.id}>{com.name}</option>
+                            ))
+                        }
+
+                    </FloatingSelectInput>
+                </div>
+            :null
+            
+        }
         <div className="mb-5">
             <FloatingSelectInput
                 label='department'
@@ -60,9 +107,11 @@ const EmployeeForm = ({onChange, handleForm, employee, company_id, buttonText, i
                 errors={errors?.department}
             >
                 {
-                    data?.departments?.map((dept:optionType)=>(
-                        <option key={dept.id} value={dept.id}>{dept.name}</option>
-                    ))
+                    data?
+                        data?.departments?.map((dept:optionType)=>(
+                            <option key={dept.id} value={dept.id}>{dept.name}</option>
+                        ))
+                    :null
                 }
 
             </FloatingSelectInput>

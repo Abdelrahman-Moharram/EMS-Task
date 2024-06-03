@@ -4,6 +4,9 @@ interface User {
 	first_name: string;
 	last_name: string;
 	email: string;
+	employee_id?:string
+	company_id?:string
+	role?:string
 }
 
 interface SocialAuthArgs {

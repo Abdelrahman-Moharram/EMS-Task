@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import EmptyContent from '../Common/EmptyContent';
 import { ImageSkeleton, Spinner } from '../Common';
-import { BasicCard } from '../Cards';
 import EmployeeCard from '../Cards/EmployeeCard';
 
 
@@ -15,7 +14,7 @@ interface card{
     designation: string,
     hired_on: Date,
     role: string,
-    status: string,
+    stage: string,
     image?:string,
     departmentName:string;
     companyName:string
@@ -53,7 +52,7 @@ const EmployeeCardsList = ({cards}:props) => {
 
       {
         waitingDelay || cards?.length?
-          <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-3">
+          <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 justify-center gap-3">
             {
             cards?.length?
               cards.map(card=>(

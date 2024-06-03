@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Paginition from "../../Components/Lists/Pagination";
 import SectionHeader from "../../Components/Common/SectionHeader";
 import { GoPlus } from "react-icons/go";
+import AdminOrNull from "../../Components/Guard/Content.Guard/AdminOrNull";
 
 const CompaniesList = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -29,14 +30,16 @@ const CompaniesList = () => {
       <div className="min-h-dvh">
         <SectionHeader title="All Companies" />
         
-        <div className="my-8">
-          <Link
-            to={'/companies/create'} 
-            className="flex items-center gap-1 w-fit px-8 py-3 border border-primary rounded-md my-3 hover:bg-primary transition-all hover:text-white"
-          >
-            <GoPlus /> Create
-          </Link>
-        </div>
+        <AdminOrNull>
+          <div className="my-8">
+            <Link
+              to={'/companies/create'} 
+              className="flex items-center gap-1 w-fit px-8 py-3 border border-primary rounded-md my-3 hover:bg-primary transition-all hover:text-white"
+            >
+              <GoPlus /> Create
+            </Link>
+          </div>
+        </AdminOrNull>
         <CardsList cards={data?.companies} prefix="/companies/" />
       </div>
 

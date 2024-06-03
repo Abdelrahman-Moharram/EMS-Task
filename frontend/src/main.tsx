@@ -18,10 +18,12 @@ import CreateCompany from './Pages/Companies/CreateCompanies.tsx';
 import ManageLayout from './Pages/Companies/Manage/ManageLayout.tsx';
 import CompanyDashboard from './Pages/Companies/Manage/CompanyDashboard.tsx';
 import DeleteCompany from './Pages/Companies/Manage/DeleteCompany.tsx';
-import Departments from './Pages/Departments/Departments.tsx';
+import Departments from './Pages/Companies/Manage/Departments.tsx';
 import DepartmentDetails from './Pages/Departments/DepartmentDetails.tsx';
 import DepartmentEmployee from './Pages/Departments/DepartmentEmployee.tsx';
 import CompanyEmployees from './Pages/Companies/Manage/Employees.tsx';
+import EmployeeDetails from './Pages/Employees/EmployeeDetails.tsx';
+import EmployeeList from './Pages/Employees/EmployeeList.tsx';
 
 
 const router = createBrowserRouter([
@@ -109,7 +111,21 @@ const router = createBrowserRouter([
             ]
           }
         ]
+      },
+      {
+        path:'/employees',
+        children:[
+          {
+            index:true,
+            element:<EmployeeList />
+          },
+          {
+            path:':employee_id',
+            element:<EmployeeDetails />
+          }
+        ]
       }
+      
     ]
   },
   

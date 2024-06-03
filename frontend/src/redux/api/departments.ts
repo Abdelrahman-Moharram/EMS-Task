@@ -26,12 +26,11 @@ const EmployeesApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['departments'],
         }),
-        getCompanyDepartmentsSelectList:builder.query({
+        getCompanyDepartmentsSelectList:builder.mutation({
             query:({company_id}:{company_id:string|undefined})=>({
                 url:`${base_url}${company_id}/departments_select`,
                 method:'GET',
             }),
-            providesTags: ['departments'],
         }),
         
         getDepartmentDetails:builder.query({
@@ -98,5 +97,5 @@ export const {
     useGetDepartmentDetailsQuery,
     useGetDepartmentFormQuery,
     useGetDepartmentEmployeesQuery,
-    useGetCompanyDepartmentsSelectListQuery
+    useGetCompanyDepartmentsSelectListMutation
 } = EmployeesApiSlice
