@@ -29,6 +29,18 @@
     ```
         npm run dev
     ```
+ - ## Created Users
+   - you can register and access the system but in this case, you don't have any roles.
+   - if you want to access the system in
+     - <strong>Admin</strong>
+       - Email: admin@site.com
+       - Password: P@ssw0rd
+     - <strong>Manager</strong>
+       - Email: ahmed-ali@gmail.com
+       - Password: P@ssw0rd123
+       - Note:
+         - The Manager role is a manager but related to only one company.
+         - but the Admin can modify all companies and create a new one.
 ---
 ## Development Process
  - I decided to start with Database design to make the next steps more clear in the development
@@ -81,6 +93,7 @@
 
     ### Handle Cascading Deletions
     In my code, I implemented <strong>"soft delete"</strong> along with <strong>"Do Noting"</strong> to address this issue. To prevent this problem, I created a global filter to retrieve only non-deleted records by creating a <strong>"BaseModel"</strong> and making all other entities inherit from it. I also created custom functions to <strong>"soft_delete()"</strong>, <strong>"delete()"</strong>, and <strong>"retrieve_deleted_items()"</strong>.
+   
     ![alt text](image-6.png)
 
 
@@ -107,6 +120,8 @@
         - List of Employees Cards with option to see details of each
         - Can Create a new Employee
             - in this form, we don't have the company_id like in the previous case so the form here has a select input to select a company and then the Departments should updated based on the selected company
+
+
     
 
             
