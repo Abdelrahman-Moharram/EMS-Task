@@ -19,7 +19,6 @@ interface props{
     data:data
 }
 const EmployeeCard = ({data}:props) => {
-    console.log(data);
     
     const created_date = () => {
         const date = new Date(data.hired_on)

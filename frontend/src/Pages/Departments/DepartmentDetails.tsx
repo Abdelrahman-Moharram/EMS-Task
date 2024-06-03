@@ -8,7 +8,6 @@ import LinkWithArrow from '../../Components/Buttons&Links/LinkWithArrow'
 const DepartmentDetails = () => {
   const {department_id} = useParams()
   const {data} = useGetDepartmentDetailsQuery({department_id}) 
-  console.log(data);
   
   return (
     <div className='p-4'>

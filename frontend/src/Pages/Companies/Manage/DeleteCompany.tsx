@@ -24,7 +24,6 @@ const {company_id} = useParams()
         toast.success(`company ${data?.company?.name} deleted successfully`)
         nav('/companies')
       }).catch((err:any)=>{
-        console.log(err);
         toast.error(err?.data.message)
       })
   }

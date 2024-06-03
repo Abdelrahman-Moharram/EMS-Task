@@ -34,7 +34,6 @@ const CreateEmployees = ({handleOverLay}:props) => {
             toast.success(data?.message)
             handleOverLay()
         }).catch((err:any)=>{
-            console.log(err);
             
             setErrors(err.data.errors)
         })

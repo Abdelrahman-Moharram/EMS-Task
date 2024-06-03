@@ -15,7 +15,6 @@ const Logout = () => {
                 dispatch(setLogout());
                 nav("/auth/login")
             }).catch((err)=>{
-                console.log(err);
                 nav("/")
             })
     }, [dispatch])

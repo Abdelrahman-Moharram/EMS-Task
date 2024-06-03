@@ -51,10 +51,8 @@ const EmployeeForm = ({onChange, handleForm, employee, company_id, buttonText, i
     useEffect(()=>{
         if(employee.company){
             getCompanyDepartmentsSelectList({company_id: employee.company})
-        }
-        if(employee.stage)  {
-            getHiringStages({stage: employee.stage})
-        }
+        }            
+        getHiringStages({stage: employee.stage ?? ''})
     },[employee.company])
     
   return (

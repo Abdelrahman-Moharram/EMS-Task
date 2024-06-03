@@ -39,7 +39,6 @@ const CompanyEmployees = () => {
         
     }
     const deleteAction=()=>{
-        console.log(deletedEmpId);
         if(deletedEmpId){
             deleteEmployee({employee_id:deletedEmpId, company_id})
             .unwrap()

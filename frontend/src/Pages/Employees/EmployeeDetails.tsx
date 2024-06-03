@@ -3,9 +3,7 @@ import { useParams } from 'react-router-dom'
 
 const EmployeeDetails = () => {
     const {employee_id} = useParams()
-    const {data} = useGetEmployeeDetailsQuery({employee_id})
-    console.log(data);
-    
+    const {data} = useGetEmployeeDetailsQuery({employee_id})   
   return (
     <div className='lg:w-[80%] min-h-screen  w-full mx-auto bg-white rounded-lg my-3 overflow-hidden p-5 pb-3'>
       <h1 className='text-2xl font-extrabold p-2'>

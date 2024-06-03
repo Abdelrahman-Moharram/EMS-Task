@@ -7,7 +7,6 @@ const Index = () => {
   const {user} = useAppSelector(state=>state.auth)
   const nav = useNavigate()
   useEffect(()=>{
-    console.log(user?.company_id);
     
     if (user?.company_id){
       return nav(`/companies/${user?.company_id}/dashboard`)
