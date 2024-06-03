@@ -72,12 +72,8 @@ def GetStages(request):
     else:
         stage = Stage.objects.filter(id=body['stage']).first()
         if not stage or stage.name == 'Hired':
-            return response.Response(
-                data={
-                    'stages': [],
-                },
-                status=status.HTTP_200_OK
-            )
+            stages = Stage.objects.all()
+            stage_serial = BaseStagesSerial(data=stages, many=True)
         else:
             stages =[]
             if stage.fulfilled_next:
@@ -98,13 +94,7 @@ def GetStages(request):
     )
 
 
-# email:'',
-# department:'',
-# address:'',
-# phonenumber:'',
-# designation:'',
-# stage:'',
-# company: ''
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def EmployeeForm(request, employee_id):
@@ -177,6 +167,10 @@ def create_employee(request, company_id):
             {'message':f'Employee {body['email']} Added Successfully'},
             status=status.HTTP_201_CREATED
         )
+    return response.Response(
+            {'errors':form.errors.as_data()},
+            status=status.HTTP_400_BAD_REQUEST
+        ) 
 
 
 @api_view(['PUT'])
@@ -216,6 +210,10 @@ def update_employee(request, company_id):
             {'message':f'Employee {body['email']} updated Successfully'},
             status=status.HTTP_200_OK
         )
+    return response.Response(
+            {'errors':form.errors.as_data()},
+            status=status.HTTP_400_BAD_REQUEST
+        ) 
 
 
 

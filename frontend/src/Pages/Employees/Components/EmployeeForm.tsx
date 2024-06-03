@@ -52,7 +52,6 @@ const EmployeeForm = ({onChange, handleForm, employee, company_id, buttonText, i
         if(employee.company){
             getCompanyDepartmentsSelectList({company_id: employee.company})
         }
-        console.log(employee);
         if(employee.stage)  {
             getHiringStages({stage: employee.stage})
         }

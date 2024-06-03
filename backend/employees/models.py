@@ -28,9 +28,10 @@ class Stage(BaseModel):
     id              = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     state           = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], default=1)
     name            = models.CharField(max_length=50)
-    is_deleted      = models.BooleanField(default=False)
-    rejected_next   = models.ForeignKey('Stage', related_name='rejected_next_step', on_delete=models.CASCADE, null=True, blank=True)
-    fulfilled_next  = models.ForeignKey('Stage', related_name='fulfilled_next_step', on_delete=models.CASCADE, null=True, blank=True)
+    
+    rejected_next   = models.ForeignKey('Stage', related_name='rejected_next_step', on_delete=models.DO_NOTHING, null=True, blank=True)
+    fulfilled_next  = models.ForeignKey('Stage', related_name='fulfilled_next_step', on_delete=models.DO_NOTHING, null=True, blank=True)
+    
     def __str__(self) -> str:
         return self.name
     
